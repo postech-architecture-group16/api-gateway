@@ -17,34 +17,19 @@
                     "400": {
                         "description": "Bad Request Response",
                         "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/ErrorsValidateData"
-                                    }
-                                }
-                            }
+                            "application/json": {}
                         }
                     },
                     "500": {
                         "description": "Internal Server Error Response",
                         "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
+                            "application/json": {}
                         }
                     },
                     "409": {
                         "description": "Conflict Response",
                         "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
+                            "application/json": {}
                         }
                     },
                     "204": {
@@ -56,11 +41,7 @@
                     "404": {
                         "description": "Not Found Response",
                         "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
+                            "application/json": {}
                         }
                     }
                 },
@@ -71,6 +52,61 @@
                     "uri": "http://${lb_dns_name}/order-api/customer/api/create",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/customer/api/{documentId}": {
+            "get": {
+                "tags": [
+                    "GetCustomer"
+                ],
+                "summary": "Find a Customer By DocumentId",
+                "operationId": "getCustomerByDocumentId",
+                "parameters": [
+                    {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok Response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found Response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                },
+                "security": [],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "GET",
+                    "uri": "http://${lb_dns_name}/order-api/customer/api/{documentId}",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.documentId": "method.request.path.documentId"
+                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
