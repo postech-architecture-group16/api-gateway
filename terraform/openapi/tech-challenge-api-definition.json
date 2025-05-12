@@ -68,7 +68,7 @@
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "POST",
-                    "uri": "http://${lb_dns_name}/customer/api/create",
+                    "uri": "http://${lb_dns_name}/order-api/customer/api/create",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
