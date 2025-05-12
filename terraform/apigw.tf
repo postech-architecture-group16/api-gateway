@@ -4,7 +4,6 @@ resource "local_file" "openapi_template" {
   content = templatefile("${path.module}/openapi/tech-challenge-api-definition.json", {
     lb_dns_name            = data.aws_lb.nlb.dns_name
     vpc_link_id            = aws_api_gateway_vpc_link.vpc_link.id
-    authorizer_credentials = data.aws_iam_role.lab_role.arn
   })
 }
 

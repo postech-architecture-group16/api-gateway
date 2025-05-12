@@ -191,15 +191,6 @@
                             "type": "string",
                             "format": "uuid"
                         }
-                    },
-                    {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Authorization token"
                     }
                 ],
                 "responses": {
@@ -293,11 +284,6 @@
                         }
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "PUT",
@@ -716,11 +702,6 @@
                         }
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
                 "summary": "Register a Product",
                 "tags": [
                     "Cook"
@@ -756,11 +737,6 @@
                         }
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
                 "summary": "Find a Product By Category",
                 "tags": [
                     "Cook"
@@ -850,11 +826,6 @@
                         "description": "Unauthorized."
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
                 "summary": "Find a Product By Category",
                 "tags": [
                     "Cook"
@@ -930,11 +901,6 @@
                         }
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
                 "summary": "Get a Product By ID",
                 "tags": [
                     "Cook"
@@ -1004,11 +970,6 @@
                         }
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
                 "summary": "Inactivate a Product By ID",
                 "tags": [
                     "Cook"
@@ -1088,11 +1049,6 @@
                         }
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
                 "summary": "Update a Product By ID",
                 "tags": [
                     "Cook"
@@ -1177,11 +1133,6 @@
                         }
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
                 "summary": "Update Order Status",
                 "tags": [
                     "Cook"
@@ -1232,20 +1183,6 @@
         }
     },
     "components": {
-        "securitySchemes": {
-            "LambdaAuthorizer": {
-                "type": "apiKey",
-                "name": "Authorization",
-                "in": "header",
-                "x-amazon-apigateway-authtype": "custom",
-                "x-amazon-apigateway-authorizer": {
-                    "type": "REQUEST",
-                    "authorizerUri": "${authorizer_uri}",
-                    "identitySource": "method.request.header.Authorization",
-                    "authorizerCredentials": "${authorizer_credentials}"
-                }
-            }
-        },
         "schemas": {
             "WebHookPaymentDataRequest": {
                 "type": "object",
