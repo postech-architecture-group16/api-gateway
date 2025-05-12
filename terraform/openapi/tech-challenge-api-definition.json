@@ -32,7 +32,7 @@
             "200": {
               "description": "OK",
               "content": {
-                "*/*": {
+                "application/json": {
                   "schema": {
                     "type": "array",
                     "items": {
@@ -112,7 +112,7 @@
             "200": {
               "description": "OK",
               "content": {
-                "*/*": {
+                "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/OrderResponseDTO"
                   }
@@ -140,27 +140,48 @@
           "tags": [
             "customer-controller"
           ],
+          "summary": "Create a new customer",
           "operationId": "createCustomer",
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomerRequestDTO"
-                }
-              }
-            },
-            "required": true
-          },
           "responses": {
             "200": {
               "description": "OK",
               "content": {
-                "*/*": {
+                "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/Customer"
                   }
                 }
               }
+            },
+            "400": {
+                "description": "Bad Request Response",
+                "content": {
+                    "application/json": {}
+                }
+            },
+            "500": {
+                "description": "Internal Server Error Response",
+                "content": {
+                    "application/json": {}
+                }
+            },
+            "409": {
+                "description": "Conflict Response",
+                "content": {
+                    "application/json": {}
+                }
+            },
+            "204": {
+                "description": "No Content Response",
+                "content": {
+                    "application/json": {}
+                }
+            },
+            "404": {
+                "description": "Not Found Response",
+                "content": {
+                    "application/json": {}
+                }
             }
           },
           "security": [],
@@ -199,7 +220,7 @@
             "200": {
               "description": "OK",
               "content": {
-                "*/*": {
+                "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/Order"
                   }
@@ -230,6 +251,7 @@
           "tags": [
             "customer-controller"
           ],
+          "summary": "Find a Customer By DocumentId",
           "operationId": "findByDocumentId",
           "parameters": [
             {
@@ -245,12 +267,24 @@
             "200": {
               "description": "OK",
               "content": {
-                "*/*": {
+                "application/json": {
                   "schema": {
                     "$ref": "#/components/schemas/Customer"
                   }
                 }
               }
+            },
+            "500": {
+                "description": "Internal Server Error Response",
+                "content": {
+                    "application/json": {}
+                }
+            },
+            "404": {
+                "description": "Not Found Response",
+                "content": {
+                    "application/json": {}
+                }
             }
           },
           "security": [],
