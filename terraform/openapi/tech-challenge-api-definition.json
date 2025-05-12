@@ -1,171 +1,449 @@
 {
     "openapi": "3.0.1",
     "info": {
-        "title": "Tech Challenge FIAP API",
-        "description": "API Rest for Tech Challenge FIAP",
-        "version": "v1"
+      "title": "Tech Challenge FIAP API",
+      "description": "API Rest for Tech Challenge FIAP",
+      "version": "v1"
     },
     "paths": {
-        "/customer/api/create": {
-            "post": {
-                "tags": [
-                    "customer"
-                ],
-                "summary": "Create a new customer",
-                "operationId": "newCustomer",
-                "responses": {
-                    "400": {
-                        "description": "Bad Request Response",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error Response",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict Response",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "204": {
-                        "description": "No Content Response",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found Response",
-                        "content": {
-                            "application/json": {}
-                        }
-                    }
-                },
-                "security": [],
-                "x-amazon-apigateway-integration": {
-                    "type": "http_proxy",
-                    "httpMethod": "POST",
-                    "uri": "http://${lb_dns_name}/order-api/customer/api/create",
-                    "connectionType": "VPC_LINK",
-                    "connectionId": "${vpc_link_id}",
-                    "responses": {
-                        "default": {
-                            "statusCode": "200"
-                        }
-                    }
-                }
+      "/products/api": {
+        "get": {
+          "tags": [
+            "products-controller"
+          ],
+          "operationId": "findProductsByCategory",
+          "parameters": [
+            {
+              "name": "category",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "LANCHE",
+                  "ACOMPANHAMENTO",
+                  "BEBIDA",
+                  "SOBREMESA"
+                ]
+              }
             }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "security": [],
+          "x-amazon-apigateway-integration": {
+              "type": "http_proxy",
+              "httpMethod": "GET",
+              "uri": "http://${lb_dns_name}/order-api/products/api",
+              "connectionType": "VPC_LINK",
+              "connectionId": "${vpc_link_id}",
+              "responses": {
+                  "default": {
+                      "statusCode": "200"
+                  }
+              }
+          }
         },
-        "/customer/api/{documentId}": {
-            "get": {
-                "tags": [
-                    "GetCustomer"
-                ],
-                "summary": "Find a Customer By DocumentId",
-                "operationId": "getCustomerByDocumentId",
-                "parameters": [
-                    {
-                        "name": "documentId",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Ok Response",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error Response",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found Response",
-                        "content": {
-                            "application/json": {}
-                        }
-                    }
-                },
-                "security": [],
-                "x-amazon-apigateway-integration": {
-                    "type": "http_proxy",
-                    "httpMethod": "GET",
-                    "uri": "http://${lb_dns_name}/order-api/customer/api/{documentId}",
-                    "connectionType": "VPC_LINK",
-                    "connectionId": "${vpc_link_id}",
-                    "requestParameters": {
-                        "integration.request.path.documentId": "method.request.path.documentId"
-                    },
-                    "responses": {
-                        "default": {
-                            "statusCode": "200"
-                        }
-                    }
+        "post": {
+          "tags": [
+            "products-controller"
+          ],
+          "operationId": "createProduct",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
                 }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
             }
+          },
+          "security": [],
+          "x-amazon-apigateway-integration": {
+              "type": "http_proxy",
+              "httpMethod": "POST",
+              "uri": "http://${lb_dns_name}/order-api/products/api",
+              "connectionType": "VPC_LINK",
+              "connectionId": "${vpc_link_id}",
+              "responses": {
+                  "default": {
+                      "statusCode": "200"
+                  }
+              }
+          }
         }
+      },
+      "/order/api/create-order": {
+        "post": {
+          "tags": [
+            "order-controller"
+          ],
+          "operationId": "createOrder",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderRequestDTO"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/OrderResponseDTO"
+                  }
+                }
+              }
+            }
+          },
+          "security": [],
+          "x-amazon-apigateway-integration": {
+              "type": "http_proxy",
+              "httpMethod": "POST",
+              "uri": "http://${lb_dns_name}/order-api/api/create-order",
+              "connectionType": "VPC_LINK",
+              "connectionId": "${vpc_link_id}",
+              "responses": {
+                  "default": {
+                      "statusCode": "200"
+                  }
+              }
+          }
+        }
+      },
+      "/customer/api/create": {
+        "post": {
+          "tags": [
+            "customer-controller"
+          ],
+          "operationId": "createCustomer",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerRequestDTO"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                }
+              }
+            }
+          },
+          "security": [],
+          "x-amazon-apigateway-integration": {
+              "type": "http_proxy",
+              "httpMethod": "POST",
+              "uri": "http://${lb_dns_name}/order-api/customer/api/create",
+              "connectionType": "VPC_LINK",
+              "connectionId": "${vpc_link_id}",
+              "responses": {
+                  "default": {
+                      "statusCode": "200"
+                  }
+              }
+          }
+        }
+      },
+      "/order/api/find-order/{id}": {
+        "get": {
+          "tags": [
+            "order-controller"
+          ],
+          "operationId": "findOrder",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          },
+          "security": [],
+          "x-amazon-apigateway-integration": {
+              "type": "http_proxy",
+              "httpMethod": "GET",
+              "uri": "http://${lb_dns_name}/order-api/order/api/{id}",
+              "connectionType": "VPC_LINK",
+              "connectionId": "${vpc_link_id}",
+              "requestParameters": {
+                  "integration.request.path.id": "method.request.path.id"
+              },
+              "responses": {
+                  "default": {
+                      "statusCode": "200"
+                  }
+              }
+          }
+        }
+      },
+      "/customer/api/{documentId}": {
+        "get": {
+          "tags": [
+            "customer-controller"
+          ],
+          "operationId": "findByDocumentId",
+          "parameters": [
+            {
+              "name": "documentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                }
+              }
+            }
+          },
+          "security": [],
+          "x-amazon-apigateway-integration": {
+              "type": "http_proxy",
+              "httpMethod": "GET",
+              "uri": "http://${lb_dns_name}/order-api/customer/api/{documentId}",
+              "connectionType": "VPC_LINK",
+              "connectionId": "${vpc_link_id}",
+              "requestParameters": {
+                  "integration.request.path.documentId": "method.request.path.documentId"
+              },
+              "responses": {
+                  "default": {
+                      "statusCode": "200"
+                  }
+              }
+          }
+        }
+      }
     },
     "x-amazon-apigateway-gateway-responses": {
-        "MISSING_AUTHENTICATION_TOKEN": {
-            "statusCode": 404,
-            "responseTemplates": {
-                "application/json": "{\"message\": \"Route not found.\"}"
-            }
-        },
-        "UNAUTHORIZED": {
-            "statusCode": 401,
-            "responseTemplates": {
-                "application/json": "{\"message\": \"Unauthorized access.\"}"
-            }
-        },
-        "DEFAULT_4XX": {
-            "statusCode": 403,
-            "responseTemplates": {
-                "application/json": "{\"message\": \"Forbidden.\"}"
-            }
-        },
-        "DEFAULT_5XX": {
-            "statusCode": 500,
-            "responseTemplates": {
-                "application/json": "{\"message\": \"Internal server error.\"}"
-            }
-        }
-    },
+          "MISSING_AUTHENTICATION_TOKEN": {
+              "statusCode": 404,
+              "responseTemplates": {
+                  "application/json": "{\"message\": \"Route not found.\"}"
+              }
+          },
+          "UNAUTHORIZED": {
+              "statusCode": 401,
+              "responseTemplates": {
+                  "application/json": "{\"message\": \"Unauthorized access.\"}"
+              }
+          },
+          "DEFAULT_4XX": {
+              "statusCode": 403,
+              "responseTemplates": {
+                  "application/json": "{\"message\": \"Forbidden.\"}"
+              }
+          },
+          "DEFAULT_5XX": {
+              "statusCode": 500,
+              "responseTemplates": {
+                  "application/json": "{\"message\": \"Internal server error.\"}"
+              }
+          }
+      },
     "components": {
-        "schemas": {
-            "CustomerRequestDTO": {
-                "required": [
-                    "documentId",
-                    "email",
-                    "name"
-                ],
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "example": "Nameperson"
-                    },
-                    "documentId": {
-                        "type": "string",
-                        "example": "13454689105"
-                    },
-                    "email": {
-                        "type": "string",
-                        "example": "nameperson@email.com"
-                    }
-                }
+      "schemas": {
+        "Product": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "LANCHE",
+                "ACOMPANHAMENTO",
+                "BEBIDA",
+                "SOBREMESA"
+              ]
+            },
+            "price": {
+              "type": "number"
+            },
+            "description": {
+              "type": "string"
             }
+          }
+        },
+        "OrderProduct": {
+          "type": "object",
+          "properties": {
+            "productId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "price": {
+              "type": "number"
+            },
+            "productName": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "OrderRequestDTO": {
+          "type": "object",
+          "properties": {
+            "customerId": {
+              "type": "string"
+            },
+            "products": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrderProduct"
+              }
+            }
+          }
+        },
+        "OrderResponseDTO": {
+          "type": "object",
+          "properties": {
+            "orderId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "sequence": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        },
+        "CustomerRequestDTO": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "documentId": {
+              "type": "string"
+            }
+          }
+        },
+        "Customer": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "documentId": {
+              "type": "string"
+            }
+          }
+        },
+        "Order": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "customer": {
+              "$ref": "#/components/schemas/Customer"
+            },
+            "total": {
+              "type": "number"
+            },
+            "orderNumber": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "createAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updateAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "products": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrderProduct"
+              }
+            },
+            "paymentId": {
+              "type": "string"
+            },
+            "isPaid": {
+              "type": "boolean"
+            }
+          }
         }
+      }
     }
-}
+  }
