@@ -12,7 +12,7 @@ variable "vpc_name" {
 
 variable "nlb_name" {
   type = string
-  default = "tech-challenge-nlb3"
+  default = "tech-challenge-nlb"
   description = "Network Load Balancer name"
 }
 
