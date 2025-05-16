@@ -306,7 +306,7 @@
       }
     },
     "/payment/api/confirm-payment/{orderId}": {
-      "get": {
+      "patch": {
         "tags": [
           "payment-controller"
         ],
