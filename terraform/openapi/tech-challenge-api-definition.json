@@ -306,7 +306,7 @@
       }
     },
     "/payment/api/confirm-payment/{orderId}": {
-      "get": {
+      "patch": {
         "tags": [
           "payment-controller"
         ],
@@ -361,6 +361,187 @@
                     "statusCode": "200"
                 }
             }
+        }
+      }
+    },
+    "/production/api/order-ready/{orderNumber}": {
+      "patch": {
+        "tags": [
+          "production-controller"
+        ],
+        "operationId": "readyOrder",
+        "parameters": [
+          {
+            "name": "orderNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "httpMethod": "PATCH",
+          "uri": "http://${lb_dns_name}/production-api/production/api/order-ready/{orderNumber}",
+          "connectionType": "VPC_LINK",
+          "connectionId": "${vpc_link_id}",
+          "requestParameters": {
+              "integration.request.path.orderNumber": "method.request.path.orderNumber"
+          },
+          "responses": {
+              "default": {
+                  "statusCode": "200"
+              }
+          }
+        }
+      }
+    },
+    "/production/api/order-prepare/{orderNumber}": {
+      "patch": {
+        "tags": [
+          "production-controller"
+        ],
+        "operationId": "inPrepareOrder",
+        "parameters": [
+          {
+            "name": "orderNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "httpMethod": "PATCH",
+          "uri": "http://${lb_dns_name}/production-api/production/api/order-prepare/{orderNumber}",
+          "connectionType": "VPC_LINK",
+          "connectionId": "${vpc_link_id}",
+          "requestParameters": {
+              "integration.request.path.orderNumber": "method.request.path.orderNumber"
+          },
+          "responses": {
+              "default": {
+                  "statusCode": "200"
+              }
+          }
+        }
+      }
+    },
+    "/production/api/order-finish/{orderNumber}": {
+      "patch": {
+        "tags": [
+          "production-controller"
+        ],
+        "operationId": "finishOrder",
+        "parameters": [
+          {
+            "name": "orderNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "httpMethod": "PATCH",
+          "uri": "http://${lb_dns_name}/production-api/production/api/order-finish/{orderNumber}",
+          "connectionType": "VPC_LINK",
+          "connectionId": "${vpc_link_id}",
+          "requestParameters": {
+              "integration.request.path.orderNumber": "method.request.path.orderNumber"
+          },
+          "responses": {
+              "default": {
+                  "statusCode": "200"
+              }
+          }
+        }
+      }
+    },
+    "/production/api/orders": {
+      "get": {
+        "tags": [
+          "production-controller"
+        ],
+        "operationId": "getOrders",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-amazon-apigateway-integration": {
+          "type": "http_proxy",
+          "httpMethod": "GET",
+          "uri": "http://${lb_dns_name}/production-api/production/api/orders",
+          "connectionType": "VPC_LINK",
+          "connectionId": "${vpc_link_id}",
+          "responses": {
+              "default": {
+                  "statusCode": "200"
+              }
+          }
         }
       }
     }
